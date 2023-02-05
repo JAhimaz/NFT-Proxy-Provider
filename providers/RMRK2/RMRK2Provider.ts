@@ -69,7 +69,7 @@ export class RMRK2Provider extends ProviderInterface {
 
   public async fetchNFTsByAddress(address: string) {
 
-    // Check if the address starts with 0x, this determines if it is a 
+    // Check if the address starts with 0x, this determines if it is a valid substrate address
     if(!this.isValidSubstrateAddress(address)) return;
 
     // Set isFetching to true, so that the client knows that the provider is fetching NFTs
@@ -82,7 +82,7 @@ export class RMRK2Provider extends ProviderInterface {
 
     // const itemIdMap: { [key: string] : string } = {};
 
-    const nfts = await client.query({
+    const nfts : NFTItem[] = await client.query({
       query: RMRK2_QUERY,
       variables: {
         address: encodedAddress
@@ -115,7 +115,7 @@ export class RMRK2Provider extends ProviderInterface {
             name: nft?.collection?.metadata_name,
             totalCount: nft?.collection?.max,
           },
-          address: address,
+          address,
           nftSpecificData: {
             children: nft?.children?.map((child: any) => {
               return {
@@ -143,7 +143,6 @@ export class RMRK2Provider extends ProviderInterface {
     return {
       nfts: nfts.filter(Boolean),
       count: this.count,
-      provider: this.name,
       address: address,
       isFetching: this.isFetching,
     }

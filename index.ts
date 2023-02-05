@@ -2,6 +2,8 @@ import express, { Express } from 'express';
 import WebSocket from 'ws';
 import dotenv from 'dotenv';
 import { RMRK1Provider, RMRK2Provider } from './providers';
+import { StatemineProvider } from './providers/Statemine/StatemineProvider';
+import { NFTData } from './providers/types';
 
 dotenv.config();
 
@@ -18,8 +20,8 @@ wss.on('connection', (ws) => {
       nfts: [],
       count: 0,
       isFetching: true,
-      error: null,
-    }
+      error: undefined,
+    } as NFTData;
     
     if(!userAddress) {
       ws.send(JSON.stringify({ ...nftData, error: "No Address Provided"}));
@@ -29,6 +31,7 @@ wss.on('connection', (ws) => {
     const providerFactory = [
       new RMRK2Provider(),
       new RMRK1Provider(),
+      new StatemineProvider(),
     ]
 
     Promise.allSettled([
@@ -37,6 +40,7 @@ wss.on('connection', (ws) => {
     ]).then((results) => {
       results.forEach((result) => {
         if (result.status === 'fulfilled') {
+          if(result.value === undefined) return;
           nftData.nfts = nftData?.nfts.concat(result.value?.nfts ?? []);
           nftData.count += result.value?.count ?? 0;
         }

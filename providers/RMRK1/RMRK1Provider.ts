@@ -58,7 +58,7 @@ export class RMRK1Provider extends ProviderInterface {
 
   public async fetchNFTsByAddress(address: string) {
 
-    // Check if the address starts with 0x, this determines if it is a 
+    // Check if the address starts with 0x, this determines if it is a valid substrate address
     if(!this.isValidSubstrateAddress(address)) return;
 
     // Set isFetching to true, so that the client knows that the provider is fetching NFTs
@@ -77,7 +77,7 @@ export class RMRK1Provider extends ProviderInterface {
         address: encodedAddress
       }
     }).then(({ data } : any ) => {  
-      const items = data?.nfts.map((nft: any) => {
+      const items : NFTItem[] = data?.nfts.map((nft: any) => {
 
         const thumb = this.toIPFSUrl(nft?.metadata_image || nft?.metadata_animation_url)
         const mediaUri = this.toIPFSUrl(nft?.metadata_animation_url || nft?.metadata_image )
@@ -103,7 +103,7 @@ export class RMRK1Provider extends ProviderInterface {
             name: nft?.collection?.name,
             totalCount: nft?.collection?.max,
           },
-          address: address,
+          address,
         } as NFTItem
       });
 
@@ -121,7 +121,6 @@ export class RMRK1Provider extends ProviderInterface {
     return {
       nfts: nfts.filter(Boolean),
       count: this.count,
-      provider: this.name,
       address: address,
       isFetching: this.isFetching,
     }

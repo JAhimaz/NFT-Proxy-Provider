@@ -35,3 +35,11 @@ export type NFTItem = {
   address: string
   nftSpecificData: any
 }
+
+export type NFTData = {
+  nfts: NFTItem[]
+  count: number
+  isFetching: boolean
+  address: string
+  error?: string
+}
