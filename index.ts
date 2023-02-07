@@ -71,6 +71,8 @@ wss.on('connection', (ws) => {
 
     if (providerFactory.length === 0) {
       ws.send(JSON.stringify({ ...nftData, error: "Address is not a valid Substrate or Ethereum Address" }));
+      ws.close();
+
       return;
     }
 
