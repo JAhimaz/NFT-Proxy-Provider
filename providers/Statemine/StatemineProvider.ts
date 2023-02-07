@@ -3,6 +3,7 @@ import { encodeAddress } from "@polkadot/util-crypto";
 import { ProviderInterface } from "../ProviderInterface";
 import fetch from 'cross-fetch';
 import { NFTItem } from "../types";
+import { isValidSubstrateAddress } from "../helpers";
 
 export class StatemineProvider extends ProviderInterface {
     name = "Statemine";
@@ -15,7 +16,7 @@ export class StatemineProvider extends ProviderInterface {
       // Start the websocket
     async wsProvider() {
         const wsProvider = new WsProvider(this.uri)
-        return ApiPromise.create({ provider: wsProvider })
+        return ApiPromise.create({ provider: wsProvider, noInitWarn: true })
     }
 
     public async getTokenDetails(assetId: any): Promise<any> {
@@ -63,7 +64,7 @@ export class StatemineProvider extends ProviderInterface {
     public async fetchNFTsByAddress(address: string) {
 
         // Check if the address starts with 0x, this determines if it is a valid substrate address
-        if(!this.isValidSubstrateAddress(address)) return;
+        if(!isValidSubstrateAddress(address)) return;
 
         // Set isFetching to true, so that the client knows that the provider is fetching NFTs
         this.isFetching = true;
@@ -104,7 +105,6 @@ export class StatemineProvider extends ProviderInterface {
                     id: collectionId,
                 },
                 address,
-                nftSpecificData: null,
             } as NFTItem
 
             // Assign NFTDetails to an NFTItem and return it to the nfts list

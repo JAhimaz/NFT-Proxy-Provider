@@ -1,3 +1,5 @@
+// NFTS
+
 export type NFTCategory =
   | 'image'
   | 'video'
@@ -33,7 +35,7 @@ export type NFTItem = {
   provider: string
   collection: NFTCollectionDetails
   address: string
-  nftSpecificData: any
+  nftSpecificData?: any
 }
 
 export type NFTData = {
@@ -41,5 +43,41 @@ export type NFTData = {
   count: number
   isFetching: boolean
   address: string
+  timeTaken?: string
   error?: string
 }
+
+// EVM
+
+export type Contract = {
+  [key: string]: {
+    address: string
+    name: string
+    symbol: string
+  }
+}
+
+export type EVMChain = {
+  name: string
+  chainId: number
+  chainCurrency: string
+  rpc: string[]
+  platformExternalLink: string
+  contracts: Contract
+}
+
+export type ABI = {
+    inputs: {
+        internalType: string;
+        name: string;
+        type: string;
+    }[];
+    name: string;
+    outputs: {
+        internalType: string;
+        name: string;
+        type: string;
+    }[];
+    stateMutability: string;
+    type: string;
+}[]

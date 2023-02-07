@@ -4,6 +4,7 @@ import { createHttpLink, gql, InMemoryCache } from "@apollo/client/core";
 import { encodeAddress } from "@polkadot/util-crypto";
 import { ProviderInterface } from "../ProviderInterface";
 import { NFTItem } from '../types';
+import { isValidSubstrateAddress } from '../helpers';
 
 const RMRK2_QUERY = gql`
   query RMRK2($address: String!) {
@@ -70,7 +71,7 @@ export class RMRK2Provider extends ProviderInterface {
   public async fetchNFTsByAddress(address: string) {
 
     // Check if the address starts with 0x, this determines if it is a valid substrate address
-    if(!this.isValidSubstrateAddress(address)) return;
+    if(!isValidSubstrateAddress(address)) return;
 
     // Set isFetching to true, so that the client knows that the provider is fetching NFTs
     this.isFetching = true;
