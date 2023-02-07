@@ -95,6 +95,8 @@ wss.on('connection', (ws) => {
       nftData.isFetching = false;
       nftData.timeTaken = Date.now() - startTime + "ms";
       ws.send(JSON.stringify(nftData));
+
+      ws.close();
     });
 
     ws.send(JSON.stringify(nftData));
